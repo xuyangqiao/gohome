@@ -8,8 +8,8 @@
       <span class="search-item" :class='{active: activeFlag === 1}' @click='searchNav(1)'>百度</span>
       <span class="search-item" :class='{active: activeFlag === 2}' @click='searchNav(2)'>Google</span>
     </div>
-    <form action="http://www.baidu.com/baidu" target="_blank" class="search-form">
-      <input type=text name=word size=40 placeholder="BaiDu搜索" class="search-box">
+    <form :action="searchConfigBox.url" target="_blank" class="search-form">
+      <input type=text :name='searchConfigBox.name' size=40 :placeholder='searchConfigBox.placeholder' class="search-box">
       <!--<input type="submit" value="" class="search-brn">-->
       <div class="search-icon-wrap">
         <i class="iconfont icon-search"></i>
@@ -34,6 +34,15 @@
             'name': 'q',
             'placeholder': 'Google搜索'
           }
+        }
+      }
+    },
+    computed: {
+      searchConfigBox () {
+        if (this.activeFlag === 1) {
+          return this.searchConfig.baidu
+        } else {
+          return this.searchConfig.google
         }
       }
     },
