@@ -1,7 +1,7 @@
 <template>
   <div class="wrap-widget">
     <timer></timer>
-    <search></search>
+    <search :infoData='infoData'></search>
   </div>
 </template>
 
@@ -12,7 +12,8 @@ export default {
   components: {
     search,
     timer
-  }
+  },
+  props: ['infoData']
 }
 </script>
 

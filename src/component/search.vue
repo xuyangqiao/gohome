@@ -1,29 +1,31 @@
 <template>
   <div class="search-wrap">
-    <!--<form method=get action="http://www.google.com/search" target="_blank">
-        <input type=text name=q size=40 maxlength=255 value="">
-        <input type=submit name=btnG value="谷歌搜索">
-      </form>-->
     <div class="search-type">
       <span class="search-item" :class='{active: activeFlag === 1}' @click='searchNav(1)'>百度</span>
       <span class="search-item" :class='{active: activeFlag === 2}' @click='searchNav(2)'>Google</span>
     </div>
     <form :action="searchConfigBox.url" target="_blank" class="search-form">
       <input type=text :name='searchConfigBox.name' size=40 :placeholder='searchConfigBox.placeholder' class="search-box">
-      <!--<input type="submit" value="" class="search-brn">-->
       <div class="search-icon-wrap">
         <i class="iconfont icon-search"></i>
       </div>
     </form>
+    <div class="desc-wrap">
+      <div class="desc">
+        <p class="title">{{infoData.title}}</p>
+        <p class="text">{{infoData.description}}</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
   export default {
+    props: ['infoData'],
     data () {
       return {
         activeFlag: 1,
-        searchConfig: {
+        searchConfig: { // 搜索的配置
           baidu: {
             'url': 'http://www.baidu.com/baidu',
             'name': 'word',
@@ -77,10 +79,37 @@
       }
     }
   }
+  .desc-wrap{
+    text-align: center;
+    z-index: -1;
+    font-size: 13px;
+    line-height: 18px;
+    font-style: italic;
+    font-weight: lighter;
+    display: block;
+    transition: all .2s ease-in-out;
+    color: #fff;
+    .desc{
+      height: 83px;
+      width: 520px;
+      margin: 0 auto;
+      transition: all .2s ease-in-out;
+    }
+    .title{
+      margin-bottom: 10px;
+      font-weight: 400;
+      font-size: 17px;
+    }
+    .text{
+      font-weight: 400;
+      font-style: normal;
+    }
+  }
 }
 
 .search-form {
   position: relative;
+  margin-bottom: 50px;
   .search-box {
     border: none;
     padding: 0 15px;

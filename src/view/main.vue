@@ -1,15 +1,19 @@
 <template>
   <div class="main" v-bind:style="{ backgroundImage: bg }">
-    <widget></widget>
+    <div class="mask"></div>
+    <btn-nav></btn-nav>
+    <widget :infoData='info'></widget>
   </div>
 </template>
 
 <script>
 import widget from '@/component/widget'
+import btnNav from '@/component/btn-nav'
 import api from '@/api'
 export default {
   components: {
-    widget
+    widget,
+    btnNav
   },
   data () {
     return {
@@ -41,5 +45,14 @@ export default {
   background-size: cover;
   width: 100%;
   height: 100%;
+  .mask{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #000;
+    opacity: .3;
+  }
 }
 </style>
