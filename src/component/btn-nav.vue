@@ -1,14 +1,15 @@
 <template>
   <div>
+    <div class="mask" @click='activeNav = -1'></div>
     <ul class="btn-nav">
-      <li class="nav-item">TO DO</li>
-      <li class="nav-item">History</li>
+      <li class="nav-item" :class='{active: activeNav === 1}' @click='navClick($event, 1)'>TO DO</li>
+      <!--<li class="nav-item">History</li>-->
       <li class="nav-item">
         <i class="iconfont icon-iconziti09"></i>
       </li>
     </ul>
   
-    <div class="todolist tab-content">
+    <div class="todolist tab-content animated" :style='{ right: menuright }' :class="activeNav === 1 ? 'fadeIn' : 'fadeOut'" v-if="activeNav === 1">
       <h2 class="title">MY TODO LIST</h2>
   
       <ul class="todolist-wrap">
@@ -16,9 +17,9 @@
           <div class="item-row">
             <i class="iconfont icon-liebiaoqianzhui"></i>
           </div>
-          <input type="checkbox" class="complete">
-          <div contenteditable class="item-content">{{item.content}}</div>
-          <div class="delete-btn">
+          <input type="checkbox" class="complete" :checked='item.isComplete' @change='taskComplete($event, index)'>
+          <div contenteditable @blur='updateTask($event, index)' class="item-content" :class='{ "content-complete": item.isComplete }'>{{item.content}}</div>
+          <div class="delete-btn" @click='deleteTask(index)'>
             <i class="iconfont icon-shanchu"></i>
           </div>
         </li>
@@ -41,7 +42,9 @@ export default {
     return {
       newHeight: '40px',
       newContent: '',
-      taskList: ''
+      taskList: '',
+      activeNav: -1,
+      menuright: ''
     }
   },
   watch: {
@@ -49,11 +52,21 @@ export default {
       this.newHeight = this.$refs.new.scrollHeight + 'px'
     }
   },
-  async created () {
-    const list = await db.getTaskList()
-    this.taskList = list
+  created () {
+    this.fetchData()
   },
   methods: {
+    navClick (e, flag) {
+      const obj = e.srcElement
+      var tmp = obj.offsetLeft
+      var val = obj.offsetParent
+      while (val != null) {
+        tmp += val.offsetLeft
+        val = val.offsetParent
+      }
+      this.menuright = window.innerWidth - tmp - e.target.clientWidth + 'px'
+      this.activeNav = this.activeNav === flag ? -1 : flag
+    },
     async newTask () {
       const obj = {
         isComplete: false,
@@ -64,13 +77,38 @@ export default {
       this.newContent = ''
       const list = await db.getTaskList()
       this.taskList = list
-      console.log(list)
+    },
+    taskComplete (e, index) {
+      const status = e.target.checked
+      db.completeTask(this.taskList[index], status)
+      this.fetchData()
+    },
+    async fetchData () {
+      const list = await db.getTaskList()
+      this.taskList = list
+    },
+    deleteTask (index) {
+      db.deleteTask(this.taskList[index])
+      this.taskList.splice(index, 1)
+    },
+    updateTask (e, index) {
+      const content = e.target.innerHTML
+      db.updateTask(this.taskList[index], content)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.mask{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #000;
+  opacity: .3;
+}
 .btn-nav {
   position: absolute;
   right: 30px;
@@ -88,6 +126,9 @@ export default {
     border-radius: 2px;
     cursor: pointer;
     &:hover {
+      background-color: rgba(0, 0, 0, .4);
+    }
+    &.active {
       background-color: rgba(0, 0, 0, .4);
     }
   }
@@ -153,6 +194,9 @@ export default {
         border: none;
         outline: none;
         background: 0 0;
+        &.content-complete{
+          text-decoration: line-through;
+        }
       }
       .delete-btn {
         width: 30px;
@@ -160,7 +204,7 @@ export default {
         cursor: pointer;
         position: absolute;
         right: 14px;
-        top: 0;
+        top: -2px;
         opacity: 0;
         text-align: center;
         line-height: 30px;

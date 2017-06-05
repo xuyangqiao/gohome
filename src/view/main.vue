@@ -1,6 +1,5 @@
 <template>
   <div class="main" v-bind:style="{ backgroundImage: bg }">
-    <div class="mask"></div>
     <btn-nav></btn-nav>
     <widget :infoData='info'></widget>
   </div>
@@ -45,14 +44,5 @@ export default {
   background-size: cover;
   width: 100%;
   height: 100%;
-  .mask{
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #000;
-    opacity: .3;
-  }
 }
 </style>

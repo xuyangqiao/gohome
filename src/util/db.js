@@ -12,9 +12,10 @@ export const db = {
     }
     req.onupgradeneeded = () => {
       let rs = req.result
-      rs.createObjectStore('todo_list', {
-        autoIncrement: 'task_id' // 指明当前数据id自增长（indexdb）
+      let store = rs.createObjectStore('todo_list', {
+        keyPath: 'addTime'
       })
+      store.createIndex('index', 'addTime', {unique: true})
     }
   },
   insertTask: (obj) => {
@@ -27,6 +28,9 @@ export const db = {
     }
   },
   getTaskList: () => {
+    if (!db.curDb) {
+      return
+    }
     return new Promise((resolve) => {
       let trans = db.curDb.transaction('todo_list', 'readwrite')
       let store = trans.objectStore('todo_list')
@@ -36,5 +40,32 @@ export const db = {
         resolve(list)
       }
     })
+  },
+  completeTask: (obj, status) => {
+    let trans = db.curDb.transaction('todo_list', 'readwrite')
+    let store = trans.objectStore('todo_list')
+    let index = store.index('index')
+    const request = index.get(obj.addTime)
+    request.onsuccess = (e) => {
+      let data = e.target.result
+      data.isComplete = status
+      store.put(data)
+    }
+  },
+  deleteTask: (obj) => {
+    let trans = db.curDb.transaction('todo_list', 'readwrite')
+    let store = trans.objectStore('todo_list')
+    store.delete(obj.addTime)
+  },
+  updateTask: (obj, content) => {
+    let trans = db.curDb.transaction('todo_list', 'readwrite')
+    let store = trans.objectStore('todo_list')
+    let index = store.index('index')
+    const request = index.get(obj.addTime)
+    request.onsuccess = (e) => {
+      let data = e.target.result
+      data.content = content
+      store.put(data)
+    }
   }
 }
