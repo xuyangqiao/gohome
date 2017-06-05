@@ -12,12 +12,12 @@
       <h2 class="title">MY TODO LIST</h2>
   
       <ul class="todolist-wrap">
-        <li class="item">
+        <li class="item" v-for="(item, index) in taskList">
           <div class="item-row">
             <i class="iconfont icon-liebiaoqianzhui"></i>
           </div>
           <input type="checkbox" class="complete">
-          <div contenteditable class="item-content"></div>
+          <div contenteditable class="item-content">{{item.content}}</div>
           <div class="delete-btn">
             <i class="iconfont icon-shanchu"></i>
           </div>
@@ -40,7 +40,8 @@ export default {
   data () {
     return {
       newHeight: '40px',
-      newContent: ''
+      newContent: '',
+      taskList: ''
     }
   },
   watch: {
@@ -48,25 +49,22 @@ export default {
       this.newHeight = this.$refs.new.scrollHeight + 'px'
     }
   },
+  async created () {
+    const list = await db.getTaskList()
+    this.taskList = list
+  },
   methods: {
-    newTask () {
-      let dataBase = db.creatDb('todo_list', function () {
-        console.log('數據庫創建成功')
-      })
-
-      dataBase.transaction((ts) => {
-        ts.executeSql('create table if not exists todo_list(content text null,is_complete boolean false,add_time text null)', [], function (ts, result) {
-          console.log(result)
-        })
-      })
-      // let taskArr = []
-      // let obj = {
-      //   isComplete: false,
-      //   content: this.newContent,
-      //   addTime: new Date().getTime()
-      // }
-      // taskArr.push(obj)
-      // localStorage.setItem('todoList', JSON.stringify(taskArr))
+    async newTask () {
+      const obj = {
+        isComplete: false,
+        content: this.newContent,
+        addTime: new Date().getTime()
+      }
+      db.insertTask(obj)
+      this.newContent = ''
+      const list = await db.getTaskList()
+      this.taskList = list
+      console.log(list)
     }
   }
 }
