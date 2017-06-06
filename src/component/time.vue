@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import * as send from '@/util/send'
 export default {
   data () {
     return {
@@ -27,6 +28,7 @@ export default {
       this.date = date.toDateString()
       setTimeout(() => {
         this.getTime()
+        send.downClassSend()
       }, 1000)
     }
   }

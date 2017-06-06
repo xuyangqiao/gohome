@@ -4,11 +4,12 @@
     <ul class="btn-nav">
       <li class="nav-item" :class='{active: activeNav === 1}' @click='navClick($event, 1)'>TO DO</li>
       <!--<li class="nav-item">History</li>-->
-      <li class="nav-item">
+      <li class="nav-item" :class='{active: activeNav === 2}' @click='navClick($event, 2)'>
         <i class="iconfont icon-iconziti09"></i>
       </li>
     </ul>
   
+    <!--日程-->
     <div class="todolist tab-content animated" :style='{ right: menuright }' :class="activeNav === 1 ? 'fadeIn' : 'fadeOut'" v-if="activeNav === 1">
       <h2 class="title">MY TODO LIST</h2>
   
@@ -32,6 +33,22 @@
         </div>
       </div>
     </div>
+
+    <!--设置-->
+    <div class="setting-wrap tab-content animated" :style='{ right: menuright }' :class="activeNav === 2 ? 'fadeIn' : 'fadeOut'" v-if="activeNav === 2">
+      <h2 class="title">SETTING</h2>
+
+      <ul class="setting">
+        <li class="setting-item">
+          <h3 class="item-title">TIME</h3>
+
+          <div class="item-clock clearfix">
+            <span class="label-title">下班时间</span>
+            <input type="text" class="time-wrap" v-model.trim="downTime" placeholder="17:30,记得按回车" @keyup.enter='downClass'>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -44,7 +61,8 @@ export default {
       newContent: '',
       taskList: '',
       activeNav: -1,
-      menuright: ''
+      menuright: '',
+      downTime: ''
     }
   },
   watch: {
@@ -54,6 +72,9 @@ export default {
   },
   created () {
     this.fetchData()
+    if (window.localStorage.downTime) {
+      this.downTime = window.localStorage.downTime
+    }
   },
   methods: {
     navClick (e, flag) {
@@ -64,7 +85,11 @@ export default {
         tmp += val.offsetLeft
         val = val.offsetParent
       }
-      this.menuright = window.innerWidth - tmp - e.target.clientWidth + 'px'
+      let clientWidth = e.target.clientWidth
+      if (e.target.nodeName === 'I') {
+        clientWidth = e.target.parentNode.clientWidth
+      }
+      this.menuright = window.innerWidth - tmp - clientWidth + 'px'
       this.activeNav = this.activeNav === flag ? -1 : flag
     },
     async newTask () {
@@ -94,6 +119,11 @@ export default {
     updateTask (e, index) {
       const content = e.target.innerHTML
       db.updateTask(this.taskList[index], content)
+    },
+
+    // 下班时间
+    downClass () {
+      window.localStorage.downTime = this.downTime
     }
   }
 }
@@ -243,6 +273,44 @@ export default {
       cursor: pointer;
       text-align: center;
       line-height: 30px;
+    }
+  }
+  &.setting-wrap{
+    width: 300px;
+    padding: 30px;
+    box-sizing: border-box;
+    .title{
+      padding-left: 0;
+    }
+  }
+  .setting{
+    .item-title{
+      font-weight: bold;
+      position: relative;
+      font-size: 13px;
+      padding: 15px 0;
+      text-decoration: none;
+      color: #424141;
+    }
+    .item-clock{
+      width: 100%;
+      .label-title{
+        float: left;
+        line-height: 21px;
+        font-weight: 600;
+        font-size: 12px;
+      }
+      .time-wrap{
+        float: right;
+        background: none;
+        border: 1px solid #ccc;
+        outline: none;
+        width: 130px;
+        height: 20px;
+        line-height: 20px;
+        font-size: 12px;
+        padding: 0 5px;
+      }
     }
   }
 }

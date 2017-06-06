@@ -21,11 +21,12 @@ export default {
   },
   computed: {
     bg () {
-      return 'url(' + this.info.url + ')'
+      if (this.info) {
+        return 'url(' + this.info.url + ')'
+      }
     }
   },
   async created () {
-    // http://bing.ioliu.cn/v1/rand?w=1920&h=1080&type=json
     const {data: {code, data}} = await api.get('/api/main')
     if (code === 200) {
       this.info = data
