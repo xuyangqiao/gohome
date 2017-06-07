@@ -6,28 +6,28 @@ export const downClassSend = () => {
   const downTime = y + '/' + m + '/' + d + ' ' + window.localStorage.getItem('downTime')
   const t = new Date(downTime).getTime() - date.getTime()
 
-  if (t <= 60 * 60 * 1000 && t >= 60 * 60 * 1000 - 1000) {
+  if (t <= 60 * 60 * 1000 && t >= 60 * 60 * 1000 - 1999) {
     sendMsg({
       title: '下班倒计时1个小时',
       content: '马上下班了，请开启酱油模式'
     })
   }
 
-  if (t <= 60 * 30 * 1000 && t >= 60 * 30 * 1000 - 1000) {
+  if (t <= 60 * 30 * 1000 && t >= 60 * 30 * 1000 - 1999) {
     sendMsg({
       title: '下班倒计时30分钟',
       content: '马上下班了，请开启酱油模式'
     })
   }
 
-  if (t <= 60 * 1 * 1000 && t >= 60 * 1 * 1000 - 1000) {
+  if (t <= 60 * 1 * 1000 && t >= 60 * 1 * 1000 - 1999) {
     sendMsg({
       title: '请关电脑！',
       content: '打卡机排队，不见不散！'
     })
   }
 
-  if (t <= 0 && t >= -1000) {
+  if (t <= 0 && t >= -1999) {
     sendMsg({
       title: '下班啦！down class go people!',
       content: '已经下班了，还不赶紧跑路，难道正在加班！'
