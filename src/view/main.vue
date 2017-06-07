@@ -2,17 +2,20 @@
   <div class="main" v-bind:style="{ backgroundImage: bg }">
     <btn-nav></btn-nav>
     <widget :infoData='info'></widget>
+    <music></music>
   </div>
 </template>
 
 <script>
 import widget from '@/component/widget'
 import btnNav from '@/component/btn-nav'
+import music from '@/component//music/music-main'
 import api from '@/api'
 export default {
   components: {
     widget,
-    btnNav
+    btnNav,
+    music
   },
   data () {
     return {

@@ -14,6 +14,7 @@ var api = require('./routes/api')
 var app = express()
 app.use(history())
 
+var music = require('./routes/music/index')
 // view engine setup
 app.set('views', path.join(__dirname))
 app.engine('html', ejs.__express);
@@ -43,6 +44,7 @@ app.all('*', function (req, res, next) {
 app.use('/', index)
 app.use('/users', users)
 app.use('/api', api)
+app.use('/music', music)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

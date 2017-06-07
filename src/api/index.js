@@ -28,7 +28,7 @@ const baseUrl = {
   dev: 'http://localhost',
   prod: 'http://time.superxu.cc'
 }
-axios.defaults.baseURL = baseUrl.prod
+axios.defaults.baseURL = baseUrl.dev
 
 axios.interceptors.response.use(response => {
   return response
