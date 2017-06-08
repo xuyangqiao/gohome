@@ -46,6 +46,13 @@ export default new Router({
               }
             }
           ]
+        },
+        {
+          name: 'listinfo',
+          path: '/music/:listid',
+          component: function (resolve) {
+            require(['./../component/music/music-listinfo.vue'], resolve)
+          }
         }
       ]
     }

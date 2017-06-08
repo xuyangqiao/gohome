@@ -1,7 +1,7 @@
 <template>
   <div class="music-page">
     <swiper class="banner-swiper" :options="swiperOption">
-      <swiper-slide v-for="(slide, index) in bannerList">
+      <swiper-slide v-for="(slide, index) in bannerList" :key='slide.targetId'>
         <a :href="slide.url" target="_blank">
           <img class="slide-banner" :src="slide.pic" :alt="slide.typeTitle">
         </a>
@@ -13,7 +13,7 @@
       <h1 class="list-title">热门歌单推荐</h1>
 
       <ul>
-        <li class="list-item" v-for="(item, index) in playlists">
+        <li class="list-item" v-for="(item, index) in playlists" @click='listInfo(item.picUrl, item.id)'>
           <div class="icon">
             <img width="60" height="60" :src="item.picUrl" lazy="loaded">
           </div>
@@ -91,6 +91,10 @@ export default {
       if (code === 200) {
         this.songList = result
       }
+    },
+    listInfo (url, listId) {
+      window.localStorage.infoUrl = url
+      this.$router.push({name: 'listinfo', params: {listid: listId}})
     }
   }
 }
@@ -124,6 +128,7 @@ export default {
     box-sizing: border-box;
     align-items: center;
     padding: 0 20px 20px;
+    cursor: pointer;
     &:last-child{
       padding-bottom: 0;
     }

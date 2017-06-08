@@ -6,6 +6,10 @@ import router from './router'
 import { db } from '@/util/db'
 db.creatDb()
 
+// register globally
+import infiniteScroll from 'vue-infinite-scroll'
+Vue.use(infiniteScroll)
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
