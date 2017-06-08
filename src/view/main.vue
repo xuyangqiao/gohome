@@ -1,8 +1,9 @@
 <template>
   <div class="main" v-bind:style="{ backgroundImage: bg }">
+    <div class="music" @click='musicGo'></div>
     <btn-nav></btn-nav>
     <widget :infoData='info'></widget>
-    <music></music>
+    <music v-show="musicShow"></music>
   </div>
 </template>
 
@@ -19,7 +20,9 @@ export default {
   },
   data () {
     return {
-      info: ''
+      info: '',
+      musicShow: false,
+      musicFlag: false
     }
   },
   computed: {
@@ -29,10 +32,29 @@ export default {
       }
     }
   },
-  async created () {
-    const {data: {code, data}} = await api.get('/api/main')
-    if (code === 200) {
-      this.info = data
+  created () {
+    this.fetchMain()
+  },
+  methods: {
+    async fetchMain () {
+      const {data: {code, data}} = await api.get('/api/main')
+      if (code === 200) {
+        this.info = data
+      }
+      setTimeout(() => {
+        this.fetchMain()
+      }, 1800000)
+    },
+    musicGo () {
+      this.musicShow = !this.musicShow
+      this.musicFlag = false
+      const reg = /music/
+      if (reg.test(location.pathname)) {
+        this.musicFlag = true
+      }
+      if (!this.musicFlag) {
+        this.$router.push('music/hot')
+      }
     }
   }
 }
@@ -48,5 +70,17 @@ export default {
   background-size: cover;
   width: 100%;
   height: 100%;
+  transition: all linear .3s;
+  .music{
+    position: absolute;
+    z-index: 10;
+    top: 30px;
+    left: 30px;
+    width: 30px;
+    height: 30px;
+    background: url('../assets/images/icon/music.png') no-repeat center;
+    background-size: cover;
+    cursor: pointer;
+  }
 }
 </style>

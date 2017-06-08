@@ -4,7 +4,7 @@
       <h1 class="list-title">热门歌单推荐</h1>
 
       <ul>
-        <li class="list-item" v-for="(item, index) in playlists">
+        <router-link tag='li' :to='{name: "listinfo", params: {listid: item.id}}' class="list-item" v-for="(item, index) in playlists" :key='item.id'>
           <div class="icon">
             <img width="60" height="60" :src="item.coverImgUrl" lazy="loaded">
           </div>
@@ -12,7 +12,7 @@
             <h2 class="name">{{item.name}}</h2>
             <p class="desc">{{item.copywriter}}</p>
           </div>
-        </li>
+        </router-link>
       </ul>
     </div>
   </div>  

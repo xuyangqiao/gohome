@@ -13,7 +13,7 @@
       <h1 class="list-title">热门歌单推荐</h1>
 
       <ul>
-        <li class="list-item" v-for="(item, index) in playlists" @click='listInfo(item.picUrl, item.id)'>
+        <router-link tag='li' :to='{name: "listinfo", params: {listid: item.id}}' class="list-item" v-for="(item, index) in playlists" :key='item.id'>
           <div class="icon">
             <img width="60" height="60" :src="item.picUrl" lazy="loaded">
           </div>
@@ -21,7 +21,7 @@
             <h2 class="name">{{item.name}}</h2>
             <p class="desc">{{item.copywriter}}</p>
           </div>
-        </li>
+        </router-link>
       </ul>
 
       <h1 class="list-title">最新音乐</h1>
@@ -91,10 +91,6 @@ export default {
       if (code === 200) {
         this.songList = result
       }
-    },
-    listInfo (url, listId) {
-      window.localStorage.infoUrl = url
-      this.$router.push({name: 'listinfo', params: {listid: listId}})
     }
   }
 }
