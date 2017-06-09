@@ -20,7 +20,7 @@
     </div>
 
     <ul v-if="playlist.tracks">
-      <li class="song-item" v-for="(item, index) in playlist.tracks">
+      <li class="song-item" v-for="(item, index) in playlist.tracks" @click='playSong(item.id)'>
         <div class="content">
           <h2 class="name">
             {{item.name}}
@@ -65,6 +65,9 @@
             })
           })
         }
+      },
+      playSong (id) {
+        this.$store.dispatch('songInfo', id)
       }
     }
   }
