@@ -27,7 +27,7 @@
       <h1 class="list-title">最新音乐</h1>
 
       <ul v-if="songList">
-        <li class="song-item" v-for="(item, index) in songList">
+        <li class="song-item" v-for="(item, index) in songList" @click='playSong(item.id, songList)'>
           <div class="content">
             <h2 class="name">
               {{item.name}}
@@ -91,6 +91,14 @@ export default {
       if (code === 200) {
         this.songList = result
       }
+    },
+    playSong (id, list) {
+      const obj = {
+        current: id,
+        list: list,
+        pre: ''
+      }
+      this.$store.dispatch('songInfo', obj)
     }
   }
 }

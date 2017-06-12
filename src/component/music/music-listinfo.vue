@@ -11,7 +11,7 @@
         <span class="tag" v-for="(item, index) in playlist.tags">{{item}}</span>
       </div>
       <div class="play-wrap">
-        <div class="play">
+        <div class="play" @click='randomAll'>
           <i class="iconfont icon-bofang"></i>
           <span class="text">随机播放全部</span>
         </div>
@@ -20,7 +20,7 @@
     </div>
 
     <ul v-if="playlist.tracks">
-      <li class="song-item" v-for="(item, index) in playlist.tracks" @click='playSong(item.id)'>
+      <li class="song-item" v-for="(item, index) in playlist.tracks" @click='playSong(item.id, playlist.trackIds)'>
         <div class="content">
           <h2 class="name">
             {{item.name}}
@@ -66,8 +66,25 @@
           })
         }
       },
-      playSong (id) {
-        this.$store.dispatch('songInfo', id)
+      playSong (id, list) {
+        const obj = {
+          current: id,
+          list: list,
+          pre: ''
+        }
+        this.$store.dispatch('songInfo', obj)
+      },
+      randomAll () {
+        const list = this.playlist.trackIds
+        const num = Math.round(Math.random() * list.length)
+        const current = this.playlist.trackIds[num].id
+        const obj = {
+          current: current,
+          list: list,
+          pre: ''
+        }
+        this.$store.dispatch('songInfo', obj)
+        this.$store.commit('changeType', 1)
       }
     }
   }
