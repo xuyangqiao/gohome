@@ -53,6 +53,9 @@
     },
     methods: {
       sendMsg () {
+        if (!this.msg) {
+          return
+        }
         const obj = {
           province: localStorage.getItem('province'),
           city: localStorage.getItem('city'),
@@ -67,7 +70,7 @@
         this.msg = ''
       },
       initConnect () {
-        this.socket = io.connect('http://localhost')
+        this.socket = io.connect('http://time.superxu.cc')
         this.socket.on('news', (data) => {
           this.msgArr.push(data)
         })

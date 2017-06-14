@@ -82,6 +82,14 @@ io.on('connection', function (socket) {
     //   data: obj
     // }
     // console.log(form)
+
+    if (data.msg === '许扬桥' || data.msg === '曾婉昀') {
+      socket.emit('news', {uesr: 2, msg: '这个名字真不错呢~一看就是好人'})
+      return
+    } else if (data.msg === '许扬桥和曾婉昀' || data.msg === '曾婉昀和许扬桥') {
+      socket.emit('news', {uesr: 2, msg: '这一对很不错呢~估计男生现在很喜欢女生吧，不知道女生心里怎么想的呢~'})
+      return
+    }
     axios.post('http://openapi.tuling123.com/openapi/api/v2', obj).then((data) => {
       const datas = data.data.results
       let obj = {uesr: 2}
