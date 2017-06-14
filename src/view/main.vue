@@ -1,10 +1,10 @@
 <template>
   <div class="main" v-bind:style="{ backgroundImage: bg }">
-    <input type="text" v-model="msg" @keyup.enter='sendMsg' style="position: fixed; z-index: 20">
     <div class="music" @click='musicGo'></div>
     <btn-nav></btn-nav>
     <widget :infoData='info'></widget>
     <music v-show="musicShow"></music>
+    <boot></boot>
   </div>
 </template>
 
@@ -12,21 +12,20 @@
 import widget from '@/component/widget'
 import btnNav from '@/component/btn-nav'
 import music from '@/component/music/music-main'
-import io from 'socket.io-client'
+import boot from '@/component/boot/boot-main'
 import api from '@/api'
 export default {
   components: {
     widget,
     btnNav,
-    music
+    music,
+    boot
   },
   data () {
     return {
       info: '',
       musicShow: false,
-      musicFlag: false,
-      socket: '',
-      msg: ''
+      musicFlag: false
     }
   },
   computed: {
@@ -38,10 +37,6 @@ export default {
   },
   created () {
     this.fetchMain()
-    this.socket = io.connect('http://localhost:8888')
-    this.socket.on('news', function (data) {
-      console.log(data)
-    })
   },
   methods: {
     async fetchMain () {
@@ -52,15 +47,6 @@ export default {
       setTimeout(() => {
         this.fetchMain()
       }, 1800000)
-    },
-    sendMsg () {
-      const obj = {
-        province: localStorage.getItem('province'),
-        city: localStorage.getItem('city'),
-        msg: this.msg,
-        userId: localStorage.getItem('bootUserId')
-      }
-      this.socket.emit('news', obj)
     },
     musicGo () {
       this.musicShow = !this.musicShow
